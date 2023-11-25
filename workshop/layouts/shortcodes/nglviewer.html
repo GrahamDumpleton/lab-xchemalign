@@ -1,0 +1,153 @@
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        educates.register_action({
+            name: "nglviewer:load-file",
+            glyph: "fa-file",
+            args: "yaml",
+            title: (args) => {
+                let url = args.url || "rcsb://1crn"
+                let dashboard = args.dashboard || "Viewer"
+                let prefix = args.prefix || "NGL Viewer"
+                let subject = args.title || `Load file to dashboard ${dashboard}`
+                return `${prefix}: ${subject}`
+            },
+            body: (args) => {
+                if (args.description !== undefined)
+                    return args.description
+                return args.url || "rcsb://1crn"
+            },
+            handler: (args, element, done, fail) => {
+                let url = args.url || "rcsb://1crn"
+                let dashboard = args.dashboard || "Viewer"
+                let panel = window.parent.document.getElementById(`${dashboard.toLowerCase()}-panel`)
+                let iframe = panel.getElementsByTagName("iframe")[0]
+                educates.expose_dashboard(dashboard)
+                let retries = 15
+                function wait_for_viewer() {
+                    if (iframe.contentWindow.stage === undefined) {
+                        if (retries-- > 0)
+                            setTimeout(wait_for_viewer, 100)
+                        else
+                            fail("Unable to load file " + url)
+                    } else {
+                        iframe.contentWindow.stage.loadFile(url, { defaultRepresentation: true })
+                        done()
+                    }
+                }
+                try {
+                    wait_for_viewer()
+                } catch (e) {
+                    console.log(e)
+                    fail("Unable to load file " + url)
+                }
+            }
+        })
+
+        educates.register_action({
+            name: "nglviewer:load-file-form",
+            glyph: "fa-file",
+            args: "yaml",
+            title: (args) => {
+                let url = args.url || "rcsb://1crn"
+                let dashboard = args.dashboard || "Viewer"
+                let prefix = args.prefix || "NGL Viewer"
+                let subject = args.title || `Enter file to load into dashboard ${dashboard}`
+                return `${prefix}: ${subject}`
+            },
+            body: (args) => {
+                if (args.description !== undefined)
+                    return args.description
+                return ""
+            },
+            handler: (args, element, done, fail) => {
+                let form_values = {}
+                let form_parent = element.prev("div.magic-code-block-form")
+                if (form_parent.length) {
+                    let form_object = form_parent.find(">form")[0]
+                    let form_data = new FormData(form_object)
+                    let object = {}
+                    form_data.forEach((value, key) => {
+                        if (!Reflect.has(object, key)) {
+                            object[key] = value
+                            return
+                        }
+                        if (!Array.isArray(object[key])) {
+                            object[key] = [object[key]]
+                        }
+                        object[key].push(value);
+                    })
+                    form_values = object
+                }
+                let url = form_values.url
+                let dashboard = args.dashboard || "Viewer"
+                let panel = window.parent.document.getElementById(`${dashboard.toLowerCase()}-panel`)
+                let iframe = panel.getElementsByTagName("iframe")[0]
+                educates.expose_dashboard(dashboard)
+                let retries = 15
+                function wait_for_viewer() {
+                    if (iframe.contentWindow.stage === undefined) {
+                        if (retries-- > 0)
+                            setTimeout(wait_for_viewer, 100)
+                        else
+                            fail("Unable to load file " + url)
+                    } else {
+                        iframe.contentWindow.stage.loadFile(url, { defaultRepresentation: true })
+                        done()
+                    }
+                }
+                try {
+                    wait_for_viewer()
+                } catch (e) {
+                    console.log(e)
+                    fail("Unable to load file " + url)
+                }
+            },
+            waiting: "fa-cog",
+            spinner: true,
+            setup: (args, element) => {
+                let inputs = {
+                    schema: {
+                        url: {
+                            type: "string",
+                            title: "Url:",
+                            default: args.url || "rcsb://1crn",
+                            required: true
+                        }
+                    },
+                    form: [
+                        "*",
+                        {
+                            type: "submit",
+                            title: "Load"
+                        }
+                    ]
+                }
+                args.inputs = inputs
+                if (args.inputs && args.inputs.schema) {
+                    let parent_element = element
+                    let title_element = parent_element.prev()
+                    let form_element = $("<form></form>")
+                    let form_options = {
+                        ...args.inputs,
+                        onSubmit: (errors, values) => {
+                            if (!errors) {
+                                title_element.trigger("click")
+                            }
+                        }
+                    }
+                    form_element.jsonForm(form_options)
+                    let div_element = $("<div class='magic-code-block-form'></div>")
+                    div_element.prepend(form_element)
+                    form_element.on("keydown", ":input:not(textarea)", function (event) {
+                        if (event.key == "Enter") {
+                            event.preventDefault()
+                        }
+                    })
+                    element.before(div_element)
+                    element.hide()
+                    title_element.css("pointer-events", "none")
+                }
+            },
+        })
+    }, false)
+</script>

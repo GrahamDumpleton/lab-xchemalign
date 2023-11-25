@@ -1,0 +1,39 @@
+apiVersion: training.educates.dev/v1beta1
+kind: Workshop
+metadata:
+  name: "lab-xchemalign"
+spec:
+  title: "XChem Align tools"
+  description: "Workshop demonstrating how to run the XChem Align process and analyse the results."
+  publish:
+    image: "$(image_repository)/lab-nglviewer-testing-files:$(workshop_version)"
+  workshop:
+    files:
+    - image:
+        url: "$(image_repository)/lab-nglviewer-testing-files:$(workshop_version)"
+      includePaths:
+      - /workshop/**
+      - /exercises/**
+      - /dashboards/**
+  session:
+    namespaces:
+      budget: medium
+    applications:
+      terminal:
+        enabled: true
+        layout: split
+      editor:
+        enabled: true
+      console:
+        enabled: false
+      docker:
+        enabled: false
+      registry:
+        enabled: false
+      vcluster:
+        enabled: false
+      files:
+        enabled: true
+    dashboards:
+    - name: Viewer
+      url: /files/dashboards/nglviewer.html

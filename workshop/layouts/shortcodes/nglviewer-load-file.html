@@ -1,0 +1,51 @@
+{{ $id := printf "load-file-%03d" $.Ordinal }}
+<div>
+    <form id="{{ $id }}"></form>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let inputs = {
+            schema: {
+                url: {
+                    type: "string",
+                    title: "Url:",
+                    default: '{{ .Get "url" | default "rcsb://1crn" }}',
+                    required: true
+                }
+            },
+            form: [
+                "*",
+                {
+                    type: "submit",
+                    title: "Load"
+                }
+            ]
+        }
+        let form_options = {
+            ...inputs,
+            onSubmit: (errors, values) => {
+                let url = values.url
+                let dashboard = "Viewer"
+                let panel = window.parent.document.getElementById(`${dashboard.toLowerCase()}-panel`)
+                let iframe = panel.getElementsByTagName("iframe")[0]
+                educates.expose_dashboard(dashboard)
+                let retries = 15
+                function wait_for_viewer() {
+                    if (iframe.contentWindow.stage === undefined) {
+                        if (retries-- > 0)
+                            setTimeout(wait_for_viewer, 100)
+                    } else {
+                        iframe.contentWindow.stage.loadFile(url, { defaultRepresentation: true })
+                    }
+                }
+                try {
+                    wait_for_viewer()
+                } catch (e) {
+                    console.log(e)
+                }
+            }
+        }
+        let form_element = document.getElementById("{{ $id }}")
+        $(form_element).jsonForm(form_options)
+    }, false)
+</script>
