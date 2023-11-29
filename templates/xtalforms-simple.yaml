@@ -1,0 +1,12 @@
+assemblies:
+  monomer:
+    reference: <reference-structure>
+    biomol: A
+    chains: A
+xtalforms:
+  xtalform1:
+    reference: <reference-structure>
+    assemblies:
+      1:
+        assembly: monomer
+        chains: A

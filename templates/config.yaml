@@ -1,0 +1,31 @@
+target_name: <target-name>
+base_dir: work/inputs
+output_dir: work/<target-name>
+
+scp:
+  server: ssh.diamond.ac.uk
+  username: <your-diamond-fedid>
+  key: <your-ssh-private-key>
+  base_dir: /
+
+ref_datasets:
+  - <ref-dataset-1>
+  - <ref-dataset-2>
+
+panddas_missing_ok:
+  - <missing-xtal-1>
+  - <missing-xtal-2>
+
+inputs:
+  - dir: dls/labxchem/data/<visit-name>
+    type: model_building
+    soakdb: processing/database/soakDBDataFile.sqlite
+    panddas_event_files:
+      - processing/analysis/panddas/analyses/pandda_inspect_events.csv
+    exclude:
+      [
+        <excluded-xtal-1>,
+        <excluded-xtal-2>
+      ]
+  - dir: dls/labxchem/data/<visit-name>/references
+    type: manual
