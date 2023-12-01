@@ -20,7 +20,7 @@ it based on user input.*
 First, let's create a directory to work in. We'll call it `work`.
 
 ```terminal:execute
-command: mkdir -p work/inputs
+command: mkdir -p work/inputs && mkdir work/outputs
 ```
 
 In there we have a `inputs` directory where we'll copy the input files (using the **copier** tool) and a `output`
@@ -30,18 +30,13 @@ Now we'll create a configuration file. You can have multiple versions of your da
 call the file `config_1.yaml`
 
 ```terminal:execute
-command: cp ~/templates/config.yaml ~/work/<taget-name>/config_1.yaml
+command: cp ~/templates/config.yaml ~/work/outputs/config_1.yaml
 ```
-
-TODO - files need to be copied to work/<target-name>/xtalforms.yaml. Can we let the user define a variable for
-<target-name>? The <target-name> needs to be present as the Fragalysis target loader currently expects the data to be
-present in a top level directory with the name of the target. Can we remove this requirement and create the tarball
-directly from the `output` dir?
 
 And we'll start to edit this config file.
 
 ```editor:open-file
-file: ~/work/<taget-name>/config_1.yaml
+file: ~/work/outputs/config_1.yaml
 ```
 
 Let's go through this file in sections.
@@ -53,10 +48,10 @@ Firstly, this bit:
 ```yaml
 target_name: <target-name>
 base_dir: work/inputs
-output_dir: work/<target-name>
+output_dir: work/outputs
 ```
 
-Replace `<target-name>` with the name of your target (both occurrences).
+Replace `<target-name>` with the name of your target.
 This will be the name that will be used in Fragalysis.
 
 
@@ -99,19 +94,19 @@ other cases you will need to make more extensive changes.
 
 Case 1: Single crystal form and single chain:
 ```terminal:execute
-command: cp ~/templates/xtalforms-simple.yaml work/<target-name>/xtalforms.yaml
+command: cp ~/templates/xtalforms-simple.yaml work/outputs/xtalforms.yaml
 ```
 
 Case 2:: single crystal form and two chains:
 ```terminal:execute
-command: cp ~/templates/xtalforms-2-chains.yaml work/<target-name>/xtalforms.yaml
+command: cp ~/templates/xtalforms-2-chains.yaml work/outputs/xtalforms.yaml
 ```
 
 TODO - provide other templates.
 
 Whichever xltalforms template you used you will now need to edit it.
 ```editor:open-file
-file: ~/work/<taget-name>/xtalforms.yaml
+file: ~/work/outputs/xtalforms.yaml
 ```
 
 For instance, in case 1, your `xtalforms.yaml` will look like this:
