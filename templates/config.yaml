@@ -1,6 +1,6 @@
 target_name: <target-name>
 base_dir: work/inputs
-output_dir: work/<target-name>
+output_dir: work/outputs
 
 scp:
   server: ssh.diamond.ac.uk
