@@ -32,7 +32,9 @@ parameter. Your SSH credentials are specified by the **scp.*** options.
 
 ## Running copier
 
-Once you have double-checked those settings you can run copier like this:
+The tool is a Python module that will be run in a terminal.
+
+Once you have double-checked the settings you can run copier like this:
 
 ```terminal:execute
 command: python -m xchemalign.copier \
@@ -45,7 +47,7 @@ command: python -m xchemalign.copier \
 THIS WILL TAKE SEVERAL MINUTES TO COMPLETE, possibly up to an hour if you have lots of data.
 And the speed will depend on your internet connection.
 
-## Outputs
+## Copier outputs
 
 As it runs you will see data accumulate in the `work/inputs` directory
 (the name is a little confusing as this directory is the *input* to the other xchemalign tools).

@@ -1,31 +1,38 @@
 target_name: <target-name>
+# base_dir is prepended to the inputs.dir path to generate the full path.
+# This allows to locate the files at a different locations to where they are at Diamond.
 base_dir: work/inputs
 output_dir: work/outputs
 
+# You SSH details that allow us to scp the files from Diamond (copier tool)
 scp:
   server: ssh.diamond.ac.uk
   username: <your-diamond-fedid>
   key: <your-ssh-private-key>
   base_dir: /
 
+# These structures will be handled as reference datasets
+# TODO - describe what a reference dataset means
 ref_datasets:
-  - <ref-dataset-1>
-  - <ref-dataset-2>
+- <ref-dataset-1>
+- <ref-dataset-2>
 
+# list any crystals that do not have PanDDAs event maps but we do want to include.
+# If they are not in this list they will NOT be processed.
 panddas_missing_ok:
-  - <missing-xtal-1>
-  - <missing-xtal-2>
+- <missing-xtal-1>
+- <missing-xtal-2>
 
+# Each input of the model_building type correspond to a Diamond visit.
 inputs:
-  - dir: dls/labxchem/data/<visit-name>
-    type: model_building
-    soakdb: processing/database/soakDBDataFile.sqlite
-    panddas_event_files:
-      - processing/analysis/panddas/analyses/pandda_inspect_events.csv
-    exclude:
-      [
-        <excluded-xtal-1>,
-        <excluded-xtal-2>
-      ]
-  - dir: dls/labxchem/data/<visit-name>/references
-    type: manual
+- dir: dls/labxchem/data/<visit-name>
+  type: model_building
+  soakdb: processing/database/soakDBDataFile.sqlite
+  panddas_event_files:
+  - processing/analysis/panddas/analyses/pandda_inspect_events.csv
+  exclude:
+  - <excluded-xtal-1>
+  - <excluded-xtal-2>
+# manual types are typically PDB files that do not derive from Diamond.
+- dir: dls/labxchem/data/<visit-name>/references
+  type: manual
