@@ -6,15 +6,15 @@ spec:
   title: "XChem Align tools"
   description: "Workshop demonstrating how to run the XChem Align process and analyse the results."
   publish:
-    image: "$(image_repository)/lab-nglviewer-testing-files:$(workshop_version)"
+    image: "$(image_repository)/lab-xchemalign-files:$(workshop_version)"
   workshop:
     files:
     - image:
-        url: "$(image_repository)/lab-nglviewer-testing-files:$(workshop_version)"
+        url: "$(image_repository)/lab-xchemalign-files:$(workshop_version)"
       includePaths:
       - /workshop/**
-      - /exercises/**
       - /dashboards/**
+      - /templates/**
   session:
     namespaces:
       budget: medium
@@ -34,6 +34,9 @@ spec:
         enabled: false
       files:
         enabled: true
+      uploads:
+        enabled: true
+        directory: .
     dashboards:
     - name: Viewer
       url: /files/dashboards/nglviewer.html

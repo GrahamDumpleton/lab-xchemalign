@@ -45,30 +45,40 @@ The bits in angle brackets will need to be edited. Other bits *may* also need ed
 
 Firstly, this bit:
 
-```yaml
-target_name: <target-name>
-base_dir: work/inputs
-output_dir: work/outputs
+```editor:select-matching-text
+file: ~/work/outputs/config_1.yaml
+text: "<target-name>"
+description: |
+  target_name: <target-name>
 ```
 
-Replace `<target-name>` with the name of your target.
-This will be the name that will be used in Fragalysis.
+Replace `<target-name>` with the name of your target. This will be the name that will be used in Fragalysis.
 
+Now edit the `scp` section. This defines how the files are copied from Diamond, and assumes you have a Diamond FedID and access to the Diamond filesystem where the data resides.
 
-Now edit the SCP section. This defines how the files are copied from Diamond, and assumes you have a Diamond FedID and 
-access to the Diamond filesystem where the data resides.
+First you need to replace the `<your-diamond-fedid>` with your FedID.
 
-```yaml
-scp:
-  server: ssh.diamond.ac.uk
+```editor:select-matching-text
+file: ~/work/outputs/config_1.yaml
+text: "<your-diamond-fedid>"
+description: |
   username: <your-diamond-fedid>
-  key: <your-ssh-private-key>
-  base_dir: /
 ```
 
-Here you need to replace `<your-diamond-fedid>` with your FedID and `<your-ssh-private-key>` with the name of your SSH
-private key that you need to copy into this project e... under `.ssh`. Hint: you might want to create a new SSH keypair
-for this purpose.
+The configuration file is configured to expect a copy of the SSH private key corresponding to the public SSH key you have uploaded to Diamond, in the location `~/.ssh/id_rsa-ssh.diamond.ac.uk` of this environment. You will need to upload this SSH provate key file.
+
+```files:upload-file
+path: .ssh/id_rsa-ssh.diamond.ac.uk
+```
+
+Hint: you might want to create a new SSH keypair for this purpose.
+
+After uploading the SSH private key, you will need to make sure permissions are set correctly.
+
+```terminal:execute
+session: 1
+command: chmod 0400 ~/.ssh/id_rsa-ssh.diamond.ac.uk
+```
 
 After editing, it might look a bit like this:
 
@@ -76,12 +86,11 @@ After editing, it might look a bit like this:
 scp:
   server: ssh.diamond.ac.uk
   username: abc12345
-  key: ~/.ssh/id_rsa
+  key: ~/.ssh/id_rsa-ssh.diamond.ac.uk
   base_dir: /
 ```
 
 etc. etc. for editing the rest of the config.yaml.
-
 
 ## Creating the xtalforms.yaml file.
 

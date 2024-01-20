@@ -8,7 +8,7 @@ output_dir: work/outputs
 scp:
   server: ssh.diamond.ac.uk
   username: <your-diamond-fedid>
-  key: <your-ssh-private-key>
+  key: ~/.ssh/id_rsa-ssh.diamond.ac.uk
   base_dir: /
 
 # These structures will be handled as reference datasets
